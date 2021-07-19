@@ -180,6 +180,7 @@ class Program<Us: UniformBindings> {
 
             gl.drawElements(
                 drawMode,
+                // gl.LINES,
                 segment.primitiveLength * primitiveSize,
                 gl.UNSIGNED_SHORT,
                 segment.primitiveOffset * primitiveSize * 2);
