@@ -806,7 +806,7 @@ class Transform {
         this.pixelMatrix = mat4.multiply(new Float64Array(16), this.labelPlaneMatrix, m);
 
         // matrix for conversion from location to GL coordinates (-1 .. 1)
-        mat4.translate(m, m, [0, 0, -elevation]);
+        // mat4.translate(m, m, [0, 0, -elevation]);
         this.projMatrix = m;
         this.invProjMatrix = mat4.invert([], this.projMatrix);
 
