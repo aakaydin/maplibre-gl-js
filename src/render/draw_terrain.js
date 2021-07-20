@@ -15,6 +15,30 @@ import browser from '../util/browser';
 import {Pos3DArray, TriangleIndexArray} from '../data/array_types';
 import EXTENT from '../data/extent';
 
+let grid;
+
+function setupRegularGrid(context, tile ){
+      
+      // if(!grid){
+         const vertexArray = new Pos3DArray(), indexArray = new TriangleIndexArray();
+         // create regular terrain-mesh.
+         const meshSize = 64; 
+         const delta = EXTENT / meshSize, meshSize2 = meshSize * meshSize;
+         for (let y=0; y<=meshSize; y++) for (let x=0; x<=meshSize; x++)
+            vertexArray.emplaceBack(x * delta, y * delta, 0.0);
+         for (let y=0; y<meshSize2; y+=meshSize+1) for (let x=0; x<meshSize; x++) {
+            indexArray.emplaceBack(x+y, meshSize+x+y+1, meshSize+x+y+2);
+            indexArray.emplaceBack(x+y, meshSize+x+y+2, x+y+1);
+         }
+
+         grid = {vertexArray: vertexArray, indexArray: indexArray};
+      // }
+
+      tile.indexBuffer = context.createIndexBuffer(grid.indexArray);
+      tile.vertexBuffer = context.createVertexBuffer(grid.vertexArray, pos3DAttributes.members);
+      tile.segments = SegmentVector.simpleSegment(0, 0, grid.vertexArray.length, grid.indexArray.length);
+}
+
 function drawTerrainCoords(painter, sourceCache: TerrainSourceCache) {
    const context = painter.context;
    const gl = context.gl;
@@ -56,6 +80,7 @@ function drawTerrain(painter: Painter, sourceCache: TerrainSourceCache) {
 }
 
 function prepareTerrain(painter: Painter, sourceCache: TerrainSourceCache, depth: number=1) {
+
    const context = painter.context;
    for (const tileID of sourceCache.getRenderableTileIds(painter.transform)) {
       const tile = sourceCache.getTileByID(tileID.key);
@@ -81,6 +106,7 @@ function prepareTerrain(painter: Painter, sourceCache: TerrainSourceCache, depth
          tile.indexBuffer = context.createIndexBuffer(indexArray);
          tile.vertexBuffer = context.createVertexBuffer(vertexArray, pos3DAttributes.members);
          tile.segments = SegmentVector.simpleSegment(0, 0, vertexArray.length, indexArray.length);
+         // setupRegularGrid(context, tile);
       }
       if (!tile.coordsTexture) {
          tile.coordsTexture = new Texture(context, tile.coords, context.gl.RGBA, {premultiply: false});

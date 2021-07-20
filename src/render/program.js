@@ -138,6 +138,8 @@ class Program<Us: UniformBindings> {
          dynamicLayoutBuffer2: ?VertexBuffer,
          dynamicLayoutBuffer3: ?VertexBuffer) {
 
+        console.log(uniformValues);
+
         const gl = context.gl;
 
         if (this.failedToCreate) return;

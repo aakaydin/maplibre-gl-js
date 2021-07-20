@@ -8,11 +8,20 @@
    <style>
        body { margin: 0; padding: 0; }
        html, body, #map { height: 100%; }
+       #checkboxes {
+            position: absolute;
+            top:0;
+            left:0;
+            padding:10px;
+        }
    </style>
 </head>
 
 <body>
 <div id='map'></div>
+<div id='checkboxes'>
+  <label><input id='show-tile-boundaries-checkbox' type='checkbox'> tile debug</label><br />
+</div>
 
 <script src='../dist/maplibre-gl-dev.js'></script>
 <script src='../debug/access_token_generated.js'></script>
@@ -3986,6 +3995,10 @@ var map = window.map = new maplibregl.Map({
 map.showTileBoundaries=false;
 // map.showCollisionBoxes = true;
 // map.showOverdrawInspector = true;
+
+document.getElementById('show-tile-boundaries-checkbox').onclick = function() {
+    map.showTileBoundaries = !!this.checked;
+};
 
 </script>
 </body>
